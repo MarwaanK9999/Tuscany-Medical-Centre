@@ -1,0 +1,116 @@
+/* Changes the background color of the body.*/
+body {
+	background-color: cyan;
+	}
+	/*Changes the size and height of the logo/image.*/
+	#homepagebanner {
+	width: 100%;
+	height: 50px;
+	}
+	/*Manipulates the appearance of the list that will be used for navigation. */
+	ul {
+	list-style-type: none;
+	width: 120;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	overflow: hidden;
+	background-color: black;
+	}
+	/*Changes the position of the list */
+	li {
+	float: left;
+	}
+	/* Changes the text properties of the list. */
+	li a {
+	display: block;
+	color: white;
+	text-align: Center;
+	padding: 16px 28px;
+	text-decoration: none;
+	}
+	li a: hover {
+	background-color: gray;
+	color: white;
+	}
+	/*Changes the text properties of the heading. */
+	h1 {
+	font-family: Bodoni MT Black;	
+	color: black;
+	font-size: 34px;
+	text-align: Center;
+	}
+	/*Changes the text properties of the referenced headings. */
+	h2, h3, h4 {
+	color: blue;
+	text-align: center;
+	font-size: 26px;
+	}
+	/*Changes the properties of the referenced image. */
+	#imgappointmentsid {
+	padding-left: 20%;
+	height: 180px;
+	width: 60%;
+	}
+	/*Changes the properties of the referenced text. */
+	#navigateappointments {
+	padding-left: 35%;
+	}
+	/*Changes the properties of the referenced div. */
+	#divappointmentdetails {
+	border: 5px Solid blue;
+	background-color: lightskyblue;
+	width: 48%;
+	height: 400px;
+	float: left;
+	}
+	/*Changes the properties of the referenced image. */
+	#imgpaymentsid {
+	padding-left: 20%;
+	height: 180px;
+	width: 60%;
+	}
+	/*Changes the properties of the referenced div. */
+	#divpaymentdetails {
+	border: 5px Solid blue;
+	background-color: lightskyblue;
+	width: 48%;
+	height: 400px;
+	float: right;
+	}
+	/*Changes the properties of the referenced text. */
+	#navigatepayments {
+	padding-left: 35%;	
+	}
+	/*Changes the properties of the referenced div. */
+	#divmedicine {
+	border: 5px Solid blue;
+	background-color: lightskyblue;
+	width: 48%;
+	height: 400px;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	overflow: hidden;
+	}
+	/*Changes the properties of the referenced image. */
+	#imgmedicineid {
+	padding-left: 20%;
+	height: 180px;
+	width: 60%;
+	}
+	/*Changes the properties of the referenced text. */
+	#navigateordermedicine {
+	padding-left: 35%;
+	}	
+/* Changes the properties of the footer. */
+footer {
+	background-color: black;
+	text-align: center;
+	}
+	/* Changes the text peoperties of the referenced paragraph. */
+	#footertextid {
+	color: white;
+	}

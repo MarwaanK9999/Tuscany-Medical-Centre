@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html>
+	
+	<!-- Links the stylesheet with the page -->
+	<link rel="stylesheet" type="text/css" href="css/Stylesheetappointments.css">
+
+	<head>
+		
+		<title>Appointments</title>
+		
+		<!-- Inserts an image onto the page -->
+		<img src="Images/TuscanyMedicalCentreBanner.jpg" alt="TuscanyMedicalCentreBanner" id="homepagebanner">
+	
+		<h1> APPOINTMENTS </h1>
+		
+	</head>
+	
+	<!-- A script function is loaded when the page loads. -->
+	<body onload= "PopulateSelection()">
+		<img>
+		<br>
+		<!-- Creates an unorganized list for navigation. -->
+		<ul>
+			<li><a href="HomePage.html"> Home </a></li>
+			<li><a href="Appointments.html"> Appointments </a></li>
+			<li><a href="Payments.html"> Payments </a></li>
+			<li><a href="OrderMedicine.html"> Order Medicine </a></li>
+			<li><a href="About.html"> About </a></li>
+		</ul>	
+		<br>
+		<h2> Book Your Appointment Now! </h2>
+		<br>
+		<!-- A form with controls is created to capture data. -->
+		<form name="AppointmentDetails" id="AppointmentDetailsid"> 
+			<h3> Patient Details </h3> 
+			<br>
+			<!-- Text input controls are created. -->
+			Patient First Name: <input type="text" name="patientfirstname" id="patientfirstnameid">
+			<br>
+			Patient Surname: <input type= "text" name="patientsurname" id="patientsurnameid">
+			<br>
+			Patient ID Number: <input type= "text" name="patientidnumber" id="patientidnoid">
+			<br>
+			Patient Age: <input type= "text" name="patientage" id="patientageid">
+			<br>
+			<h4> Patient Category </h4>
+			<br>
+			<!-- Radio button controls are created. -->
+			<fieldset id="PatientCategory">
+			<legend> Select Patient Category: </legend>
+				<input type= "radio" name= "patientcategory" id="patientcategoryid" value= "Child" checked> Child
+				<input type= "radio" name= "patientcategory" id="patientcategoryid" value= "Adult"> Adult
+				<input type= "radio" name= "patientcategory" id="patientcategoryid" value= "Elderly"> Elderly
+			</fieldset>
+			<br>
+			<!-- Checkbox controls are created. -->
+			<input type= "checkbox" name="firstvisit" id="firstvisitid" value="FirstVisit" onclick="RunFirstTimePatient()"> First Visit?
+			<input type= "checkbox" name="medhistory" id="medhistoryid" value="MedicalHistory" onclick="RunLongTermHistory()"> Long-term medical history?
+			<input type= "checkbox" name="patientmedaid" id="patientmedaidid" value="MedicalAid" onclick="RunMedAid()"> Medical Aid?
+			<br>
+			<h4> Client Details </h4>
+			<!-- Text input controls are created. -->
+			Client First Name: <input type= "text" name="clientfirstname" id="clientfirstnameid">
+			<br>
+			Client Surname: <input type= "text" name="clientsurname" id="clientsurnameid">
+			<br>
+			Client ID Number: <input type= "text" name="clientidnumber" id="clientidnumberid">
+			<br>
+			Client Contact Number: <input type= "text" name="clientcontactnumber" id="clientcontactnumberid">
+			<br>
+			<!-- An email input control is created. -->
+			Client E-mail Address: <input type= "email" name="clientmail" id="clientmailid">
+			<br>
+			<!-- A drop down box control is created. -->
+			Check-Up Type: <select id="CheckUpOptions" width= 20%> 
+			<option value="None"> </option>
+			</select>
+			<br>
+			<!-- A date input control is created.. -->
+			Appointment Date: <input type= "date" name="date" id="dateid">
+			<br>
+			<br>
+			<!-- The button is created to run the funcion which will process all the data. -->
+			<input type= "button" value="Display Details" id="detailsdisplayid" onclick="DisplayDetails()">
+			<br>
+			<!-- A button to reset the controls to their default states is created. -->
+			<input type= "reset" value="Clear" id="detailsclearid">
+			<br>
+			<br>
+			<!-- A paragraph is created to display data. -->
+			<p id="display"></p>
+			</form>
+			
+	<script>
+		
+		// The declaration of the variables which will store the appointment details data. Some are given default values.
+		var AppointmentNo;
+		var PName;
+		var PSurname;
+		var PId;
+		var PAge;
+		var PCategory;
+		var PFullName;
+		var CName;
+		var CSurname;
+		var CId;
+		var CFullName;
+		var CContactNo;
+		var CEmail;
+		var CheckUpOption;
+		var AppointmentDate;
+		var FinalTotal;
+		var FirstTimeVisit = "No";
+		var Medhistory = "No";
+		var MedicalAid = "No;"
+		
+		// Declaration of a variable that will store the alert message.		
+		var AlertString;
+		
+		//Arrays that will be used to populate drop down boxes and determine costs.
+		var CheckUpType = ["Influenza", "Cold", "Cancer", "Tubercolosis", "Fever", "Covid-19", "Full Check-Up"];
+		var CheckUpMenu = document.getElementById("CheckUpOptions");
+		var CheckUpCost = ["200", "250", "500", "280", "200", "450", "550"];
+		
+		//Declaration of the variables which will store the array index value and the consultation fee.		
+		var SelectedIndex;
+		var ConsultationFee;			
+		
+		// A funcion which will run a For Loop that will populate the Check-Up drop down box.
+		function PopulateSelection() {		
+							
+			for(var x = 0; x < CheckUpType.length; x++) {												
+					
+				var data = document.createElement("option");
+				data.text = CheckUpType[x];
+				data.value = CheckUpType[x];
+				CheckUpMenu.options.add(data);
+			};
+				
+		};
+		
+		// A function that will execute the alert.
+		function AlertStatement(alertstring) {
+		
+			alert(alertstring);
+		
+		};
+		
+		// A function with a parameter which will execute the validation of user input.
+		function ValidateInput(alerttext) {
+			// Variables are declared to be used to check the values that have been entered.
+			var PatientName = AppointmentDetails.patientfirstname.value;
+			var PatientSurname = AppointmentDetails.patientsurname.value;
+			var PatientId = AppointmentDetails.patientidnumber.value;
+			var PatientAge = AppointmentDetails.patientage.value;
+			var ClientName = AppointmentDetails.clientfirstname.value;
+			var ClientSurname = AppointmentDetails.clientsurname.value;
+			var ClientId = AppointmentDetails.clientidnumber.value;
+			var ClientContactNo = AppointmentDetails.clientcontactnumber.value;
+			var ClientEmail = AppointmentDetails.clientmail.value;
+			var CheckUp = AppointmentDetails.CheckUpOptions.value;
+			var PatientAppointmentDate = AppointmentDetails.date.value;
+			// if statements are used to check the user input.	
+			if (PatientName == "") {
+			alerttext = "Patient Name must be entered.";
+			AlertStatement(alerttext);
+			document.getElementById("patientfirstnameid").focus();
+			return false;
+				
+			} else if (PatientSurname == "") {
+			alerttext = "Patient Surname must be entered.";
+			AlertStatement(alerttext);
+			document.getElementById("patientsurnameid").focus();
+			return false;
+								
+			} else if (PatientId == "") {
+			alerttext = "Patient ID must be entered.";
+			AlertStatement(alerttext);
+			document.getElementById("patientidnoid").focus();
+			return false;
+								
+			} else if (isNaN(PatientAge)) {
+			alerttext = "Patient Age (Numeric) must be entered.";
+			AlertStatement(alerttext);
+			document.getElementById("patientageid").focus();
+			return false;
+												
+			} else if (ClientName == "") {
+			alerttext = "Client Name must be entered.";
+			AlertStatement(alerttext);
+			document.getElementById("clientfirstnameid").focus();
+			return false; 
+				
+			} else if (ClientSurname == "") {
+			alerttext = "Client Surname must be entered.";
+			AlertStatement(alerttext);
+			document.getElementById("clientsurnameid").focus();
+			return false;
+				
+			} else if (ClientId == "") {
+			alerttext = "Client ID must be entered.";
+			AlertStatement(alerttext);
+			document.getElementById("clientidnumberid").focus();
+			return false;
+			
+			} else if (ClientContactNo == "") {
+			alerttext = "Client Contact No must be entered.";
+			AlertStatement(alerttext);
+			document.getElementById("clientcontactnumberid").focus();
+			return false;
+				
+			} else if (ClientEmail == "") {
+			alerttext = "Client Email must be entered.";
+			AlertStatement(alerttext);
+			document.getElementById("clientmailid").focus();
+			return false; 
+				
+			} else if (CheckUp == "None") {
+			alerttext = "A CheckUp must be selected."; 
+			AlertStatement(alerttext);
+			document.getElementById("CheckUpOptions").focus();
+			return false;
+				
+			} else if (PatientAppointmentDate == "") {
+			alerttext = "Date must be selected."; 
+			AlertStatement(alerttext);
+			document.getElementById("dateid").focus();
+			return false;	
+			
+			} else {
+			alerttext = "Details successfully entered.";
+			var a = alerttext;
+			AlertStatement(alerttext);
+			return a;
+				
+			};
+		
+		};
+		
+		// This function will be used to get a value from the "First Time Visit" checkbox. A value is then returned.
+		function FirstTimePatient() {
+		
+			var first;
+		
+			if (document.getElementById("firstvisitid").checked == true) {
+				first = "Yes";
+				
+			} else if (document.getElementById("firstvisitid").checked == false) {
+				first = "No";
+			
+			};
+		
+			return first;
+		
+		};
+		
+		// The data gotten from the checkbox is put into a variable in this function.
+		function RunFirstTimePatient() {
+		
+			FirstTimeVisit = FirstTimePatient();
+		
+		};
+		
+		// This function will be used to get a value from the "Long Term Medical History" checkbox. A value is then returned.
+		function LongTermHistory() {
+		
+			var longtimepatient;
+		
+			if (document.getElementById("medhistoryid").checked == true) {
+				longtimepatient = "Yes";
+				
+			} else if (document.getElementById("medhistoryid").checked == false) {
+				longtimepatient = "No";
+			
+			};
+		
+			return longtimepatient;
+		
+		};
+		
+		// The data gotten from the checkbox is put into a variable in this function.
+		function RunLongTermHistory() {
+		
+		Medhistory = LongTermHistory();
+		
+		};
+		
+		// This function will be used to get a value from the "Medical Aid" checkbox. A value is then returned.
+		function MedAid() {
+			
+			var medaid;
+					
+			if (document.getElementById("patientmedaidid").checked == true) {
+				medaid = "Yes";
+				
+			} else if (document.getElementById("patientmedaidid").checked == false) {
+				medaid = "No";
+			
+			};
+		
+			return medaid;
+			
+		};
+		
+		// The data gotten from the checkbox is put into a variable in this function.
+		function RunMedAid() {
+		
+		 MedicalAid = MedAid();
+		
+		};
+
+		// This function randomisez numbers, which generates an appointment number and returns the value.
+		function GenerateAppointmentNumber() {
+		
+			var appnumber;
+		
+			appnumber = Math.floor(Math.random() * 10).toString() + Math.floor(Math.random() * 10).toString() + Math.floor(Math.random() * 10).toString() +
+						Math.floor(Math.random() * 10).toString() + Math.floor(Math.random() * 10).toString();
+		
+			return appnumber;
+		
+		};
+
+		//The value is assigned to a variable in this function.
+		function AssignAppointmentNo() {
+		
+			AppointmentNo = GenerateAppointmentNumber();
+		
+		}
+
+		//The consulatation fee is calculated by fetching the amount from the array, the function uses a parameter. The value is returned.
+		function DetermineConsulationFee(index) {
+		
+			var Fee;	
+		
+			for(var y = 0; y < index; y = y + 1) {												
+				Fee = parseInt(CheckUpCost[y])
+			};
+											
+			return Fee;
+				
+		};
+		
+		// The total cost is is calculated by checking the patient category, it uses that as well as the consulatation fee as parameters. The value is returned.
+		function CalculateTotalCost(pcat, CFee) {
+			
+			var TotalCost;		
+																					
+			if (pcat == "Child") {
+			TotalCost = parseInt(CFee) * 0.9 + 50 }
+			else if (pcat == "Adult") {
+			TotalCost = parseInt(CFee) + 45 }
+			else {
+			TotalCost = parseInt(CFee) * 0.65 + 120 };
+				
+			return TotalCost;
+											
+		};
+		
+		// The calculation functions are executed, and they are assigned to variables which end up with the final total amount.
+		function EnterCalculations() {
+
+			SelectedIndex = CheckUpMenu.selectedIndex;
+			
+			ConsultationFee = parseInt(DetermineConsulationFee(SelectedIndex));
+			
+			FinalTotal = CalculateTotalCost(PCategory, ConsultationFee);
+
+		};
+		
+		// This function uses the first name and surname as parameters, and adds them together to form the full name, the value is then returned.
+		function FullName(first, last) {
+			
+			var full;
+			full = first + " " + last;
+			return full;
+			
+		};
+		
+		// The full name function is executed to determine both the patient and client full names.
+		function RunFullName() {
+		
+			PFullName = FullName(PName, PSurname);
+			CFullName = FullName(CName, CSurname);
+		
+		};
+		
+		// The appointments details are assigned to variables in this function.
+		function EnterAppointmentDetails() {
+			
+			// The function which validates user input is executed. 
+			ValidateInput(AlertString);
+			
+			//The function which assigns the Appointment number to a variable is executed.
+			AssignAppointmentNo();
+			// Values are assinged to variables that were declared at the start.
+			PName = AppointmentDetails.patientfirstname.value;
+			PSurname = AppointmentDetails.patientsurname.value;
+			PId = AppointmentDetails.patientidnumber.value;
+			PAge = AppointmentDetails.patientage.value;
+			PCategory = AppointmentDetails.patientcategory.value;
+			CName = AppointmentDetails.clientfirstname.value;
+			CSurname = AppointmentDetails.clientsurname.value;
+			CId = AppointmentDetails.clientidnumber.value;
+			CContactNo = AppointmentDetails.clientcontactnumber.value;
+			CEmail = AppointmentDetails.clientmail.value;
+			CheckUpOption = AppointmentDetails.CheckUpOptions.value;
+			AppointmentDate = AppointmentDetails.date.value;
+									
+		};
+		
+		// This function is used to import the data from this webpage to another webpage.
+		function ImportData() {
+			
+			// Data is sent to the local storage by making use of the variables.
+			localStorage.setItem("ClientIDAppointments", CId);
+			localStorage.setItem("ClientContactNoAppointments", CContactNo);
+			localStorage.setItem("TotalCostAppointments", FinalTotal);
+			localStorage.setItem("ClientEmailAppointments", CEmail);
+			localStorage.setItem("MedicalAidAppointments", MedicalAid);
+			localStorage.setItem("AppointmentNumAppointments", AppointmentNo);
+			localStorage.setItem("ClientFullNameAppointments", CFullName);
+			
+		};
+		
+		// The function to enter all the appointment details is executed.
+		function EnterDetails() {
+			
+			EnterAppointmentDetails();
+			EnterCalculations();	
+					
+		};
+		
+		//The entire code which will run to finalize the appointment details is executed in this function.
+		function Execute() {
+		
+			EnterDetails();
+			RunFullName();
+		
+		}
+		
+		//This function is used to display all the details.
+		function DisplayDetails() {
+			
+			// The function which finalized the appointment details is executed here.
+			Execute();
+			// The appointment details are displayed in a paragraph.
+			document.getElementById("display").innerHTML = 	"Patient Full Name: " + PFullName + 
+															"<br>" + "Patient ID Number: " + PId + 
+															"<br>" + "Patient Age: " + PAge + 
+															"<br>" + "Patient Category: " + PCategory +
+															"<br>" + "Appointment No: " + AppointmentNo +
+															"<br>" + "First Visit: " + FirstTimeVisit +
+															"<br>" + "Long Term Medical History: " + Medhistory +
+															"<br>" + "Medical Aid: " + MedicalAid +
+															"<br>" + "Client Full Name: " + CFullName + 
+															"<br>" + "Client ID Number: " + CId +
+															"<br>" + "Client Contact Number: " + CContactNo + 
+															"<br>" + "Client Email Address: " + CEmail +
+															"<br>" + "Check Up Option: " + CheckUpOption + 
+															"<br>" + "Appointment Date: " + AppointmentDate +
+															"<br>" + "Total Cost of Appointment: " +  FinalTotal;
+			// The function that imports the data to another webpage is executed.
+			ImportData();
+		
+		};
+				
+	</script>
+	
+	</body>
+		
+	<footer>
+		<!-- Shows information about the business. -->
+		<p id="footertextid"> Contact Number: 021 921 5674
+		<br>
+		Mail: tmedcntr@doc.com
+		<a id="navigatepayments" href="Payments.html"> PAY NOW </a> </p> 
+		</p>
+	</footer>
+							
+</html> 
